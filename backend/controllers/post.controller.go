@@ -7,6 +7,7 @@ import (
 
 	"github.com/Harrieson/golangbackend/database"
 	"github.com/Harrieson/golangbackend/models"
+	"github.com/Harrieson/golangbackend/util"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -57,4 +58,28 @@ func DetailPost(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"data": blogpost,
 	})
+}
+
+func UpdatePost(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+	blog := models.Blog{
+		Id: uint(id),
+	}
+
+	if err := c.BodyParser(&blog); err != nil {
+		fmt.Println("Unable to parse the body")
+	}
+
+	database.DB.Model(&blog).Updates(blog)
+	return c.JSON(blog)
+}
+
+func UniquePost(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	id, _ := util.Parsejwt(cookie)
+
+	var blog []models.Blog
+	database.DB.Model(&blog).Where("user_id=?", id).Preload("User").Find(&blog)
+
+	return c.JSON(blog)
 }
