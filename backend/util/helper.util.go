@@ -9,7 +9,7 @@ import (
 const SecretKey = "secret"
 
 func GenerateJwt(issuer string) (string, error) {
-	claims := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.StandardClaims{
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    issuer,
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})

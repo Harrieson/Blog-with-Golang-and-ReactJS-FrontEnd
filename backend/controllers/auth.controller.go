@@ -11,6 +11,7 @@ import (
 	"github.com/Harrieson/golangbackend/database"
 	"github.com/Harrieson/golangbackend/models"
 	"github.com/Harrieson/golangbackend/util"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -92,17 +93,23 @@ func Login(c *fiber.Ctx) error {
 	token, err := util.GenerateJwt(strconv.Itoa(int(user.Id)))
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
+		fmt.Println(err)
 		return nil
 	}
+
 	cookie := fiber.Cookie{
 		Name:     "jwt",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
 		HTTPOnly: true,
 	}
-	c.Cookie((&cookie))
+	c.Cookie(&cookie)
 	return c.JSON(fiber.Map{
 		"message": "you have successfully login",
 		"user":    user,
 	})
+}
+
+type Claims struct {
+	jwt.StandardClaims
 }

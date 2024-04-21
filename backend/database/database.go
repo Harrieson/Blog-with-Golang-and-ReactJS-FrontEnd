@@ -30,5 +30,6 @@ func Connect() {
 
 	database.AutoMigrate(
 		&models.User{},
+		&models.Blog{},
 	)
 }

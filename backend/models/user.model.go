@@ -12,7 +12,7 @@ type User struct {
 }
 
 func (user *User) SetPassword(password string) {
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 18)
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
 	user.Password = hashedPassword
 }
 func (user *User) ComparePassword(password string) error {

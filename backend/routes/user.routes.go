@@ -7,6 +7,10 @@ import (
 )
 
 func Setup(app *fiber.App) {
-	app.Use(middleware.IsAuthenticate)
 	app.Post("/api/users/register", controllers.Register)
+	app.Post("/api/users/login", controllers.Login)
+
+	app.Use(middleware.IsAuthenticate)
+	app.Post("/api/posts/add", controllers.CreatePost)
+	app.Get("/api/posts", controllers.GetAllPosts)
 }
